@@ -1,0 +1,6 @@
+<?php
+
+return [
+    '/' => 'TestController@index'
+];
+

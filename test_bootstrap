@@ -1,0 +1,70 @@
+#!/bin/bash
+
+output=./result_bootstrap.md
+benchmark="wrk -t12 -c400 -d30s http://localhost:12345"
+lastPID=
+
+function _run_background_server()
+{
+    php -S localhost:12345 -t $1 2>/dev/null &
+    lastPID=$!
+    sleep 3
+}
+
+rm -f $output
+
+which wrk
+if [ $? != 0 ]; then
+    echo "\"wrk\" command not found. Install it. (https://github.com/wg/wrk)"
+fi
+
+echo -e "# Bootstrap benchmark" >> $output
+
+echo -e "* Local environment" >> $output
+echo -e "\`\`\`" >> $output
+php -v >> $output
+echo -e "\`\`\`\n" >> $output
+
+echo -e "* Benchmark tool  " >> $output
+echo -e "wrk [https://github.com/wg/wrk](https://github.com/wg/wrk)" >> $output
+echo -e "\`\`\`" >> $output
+echo -e "$benchmark" >> $output
+echo -e "\`\`\`\n" >> $output
+
+echo -e "# Results" >> $output
+
+_run_background_server minph/public/
+echo -e "## minph framework" >> $output
+echo -e "\`\`\`" >> $output
+eval $benchmark >> $output
+echo -e "\`\`\`" >> $output
+kill $lastPID
+
+echo "" >> $output
+
+_run_background_server cakephp/webroot/
+echo -e "## CakePHP 3.4" >> $output
+echo -e "\`\`\`" >> $output
+eval $benchmark >> $output
+echo -e "\`\`\`" >> $output
+kill $lastPID
+
+echo "" >> $output
+
+_run_background_server yii/web/
+echo -e "## Yii 2.0" >> $output
+echo -e "\`\`\`" >> $output
+eval $benchmark >> $output
+echo -e "\`\`\`" >> $output
+kill $lastPID
+
+echo "" >> $output
+
+_run_background_server laravel/public/
+echo -e "## Laravel framework 5.4" >> $output
+echo -e "\`\`\`" >> $output
+eval $benchmark >> $output
+echo -e "\`\`\`" >> $output
+kill $lastPID
+
+echo "" >> $output

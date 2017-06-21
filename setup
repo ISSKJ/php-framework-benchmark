@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo -e "[cakephp]"
+cd cakephp/
+composer update --no-dev -vvv
+composer -o dump-autoload
+cd ../
+
+echo -e "[laravel]"
+cd laravel/
+composer update --no-dev -vvv
+composer -o dump-autoload
+cd ../
+
+echo -e "[minph]"
+cd minph/
+composer update --no-dev -vvv
+composer -o dump-autoload
+cd ../
+
+echo -e "[yii]"
+cd yii/
+composer update --no-dev -vvv
+composer -o dump-autoload
+cd ../

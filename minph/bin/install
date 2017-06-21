@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ROOT_DIR=`pwd`
+
+cd $ROOT_DIR/framework/;
+composer update -vvv;
+composer -o dumpautoload
+cd $ROOT_DIR;
+
+composer update -vvv;
+composer -o dumpautoload
+
