@@ -13,9 +13,10 @@ function _run_background_server()
 
 rm -f $output
 
-which wrk
+which wrk 1>/dev/null
 if [ $? != 0 ]; then
-    echo "\"wrk\" command not found. Install it. (https://github.com/wg/wrk)"
+    echo -e "\"wrk\" command not found. Install it. (https://github.com/wg/wrk)"
+    exit 1
 fi
 
 echo -e "# Bootstrap benchmark" >> $output
